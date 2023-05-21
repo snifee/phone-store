@@ -25,7 +25,7 @@ public class OrderService {
 
     private final ModelMapper modelMapper;
 
-    private final WebClient webClient;
+    private final WebClient.Builder webClientBuilder;
 
     public Order placeOrder(OrderRequest orderRequest){
         Order order = new Order();
@@ -44,8 +44,8 @@ public class OrderService {
                 .toList();
 
         //WEB CLIENT API CALL
-        InventoryResponse[] inventoryResponses = webClient.get()
-                .uri("http://localhost:9091/api/inventory", 
+        InventoryResponse[] inventoryResponses = webClientBuilder.build().get()
+                .uri("http://inventory-server/api/inventory",
                         uriBuilder -> uriBuilder.queryParam("skuCode", orderSkuCodes).build())
                 .retrieve()
                 .bodyToMono(InventoryResponse[].class)
